@@ -92,6 +92,96 @@ std::set<std::string> boggle(const std::set<std::string>& dict, const std::set<s
 bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>& prefix, const std::vector<std::vector<char> >& board, 
 								   std::string word, std::set<std::string>& result, unsigned int r, unsigned int c, int dr, int dc)
 {
-//add your solution here!
+  //add your solution here!
 
+  // base case 
+  if (r == board.size() || c == board[0].size())
+  {    
+    // check if word is a word 
+    // if so insert and return true 
+    if (dict.find(word) != dict.end())
+    {
+      result.insert(word);
+      return true; 
+    }
+    // otherwise return false 
+    return false; 
+  }
+
+  // 2 cases in addition to base case 
+
+  // case 1 is it a prefix 
+  // if so --> add the letter and recurse 
+  // if recursive call is false then check if current word is a word then add 
+  if (prefix.find(word) != prefix.end())
+  {
+    std::string temp = word; 
+    temp = temp + board[r][c];
+    // rightwards case 
+    if (dr == 1 && dc == 0)
+    {
+      if (boggleHelper(dict, prefix, board, temp, result, r, c+1, dr, dc))
+      {
+        return true; 
+      }
+      else if (dict.find(word) != dict.end())
+      {
+        result.insert(word); 
+        return true; 
+      }
+    }
+    // downwards case 
+    if (dr == 0 && dc == 1)
+    {
+      if (boggleHelper(dict, prefix, board, temp, result, r+1, c, dr, dc))
+      {
+        return true; 
+      }
+      else if (dict.find(word) != dict.end())
+      {
+        result.insert(word); 
+        return true; 
+      }
+    }
+    // diagonal case 
+    if (dr == 1 && dc == 1)
+    {
+      if (boggleHelper(dict, prefix, board, temp, result, r+1, c+1, dr, dc))
+      {
+        return true; 
+      }
+      else if (dict.find(word) != dict.end())
+      {
+        result.insert(word); 
+        return true; 
+      }
+    }
+  }
+  // case 2 it is not a prefix 
+  else 
+  {
+    if (dict.find(word) != dict.end())
+    {
+      result.insert(word); 
+      return true; 
+    }
+    return false; 
+  }
+  return false; 
 }
+
+
+
+
+//pseudo code 
+
+// 2 cases in addition to base case 
+
+// case 1 is it a prefix 
+// if so --> add the letter and recurse 
+  // if recursive call is false then check if current word is a word then add 
+
+// case 2 is it not a prefix 
+// check if its a word 
+// if so, add it and return true 
+// if not a word return false 
